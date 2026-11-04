@@ -1,0 +1,112 @@
+/*
+  Gearhead FEA — design tokens.
+
+  Identity: an engineering drawing sheet.
+    light  = "vellum"    (warm drafting paper, ink-black linework)
+    dark   = "blueprint" (cyanotype navy, chalk-white linework)
+  Accent = "stress red", the hot end of a FEA contour plot. The six --gh-c*
+  stops are the contour ramp used by the hero animation, legend bars and
+  plan highlights — it is the one recurring motif of the brand.
+
+  All tokens are prefixed --gh- so they never collide with the workspace
+  stylesheet (which is only mounted on /app).
+*/
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+  --gh-paper: #f3eee2;
+  --gh-paper-2: #eae3d1;
+  --gh-card: #faf7ee;
+  --gh-ink: #111a2b;
+  --gh-ink-2: #3d495e;
+  --gh-ink-3: #596579;
+  --gh-rule: #cdc3aa;
+  --gh-rule-strong: #111a2b;
+  --gh-grid: rgba(17, 26, 43, 0.055);
+  --gh-grid-major: rgba(17, 26, 43, 0.09);
+
+  --gh-accent: #c8361b;
+  --gh-accent-hover: #ab2c14;
+  --gh-accent-ink: #ffffff;
+  --gh-accent-soft: #f4dcd3;
+  --gh-link: #1d3fae;
+
+  --gh-ok: #1b6e45;
+  --gh-ok-soft: #d9ecdf;
+  --gh-warn: #8a5a05;
+  --gh-warn-soft: #f5e6bf;
+  --gh-danger: #b0261a;
+  --gh-danger-soft: #f6d9d4;
+  --gh-info: #1d3fae;
+  --gh-info-soft: #dbe2f6;
+
+  --gh-c0: #2a4bd7;
+  --gh-c1: #1b9bc4;
+  --gh-c2: #35a870;
+  --gh-c3: #d9b92e;
+  --gh-c4: #ee8426;
+  --gh-c5: #d3341d;
+
+  --gh-shadow: 0 1px 0 rgba(17, 26, 43, 0.08), 0 14px 30px -18px rgba(17, 26, 43, 0.35);
+  --gh-focus: 0 0 0 3px rgba(29, 63, 174, 0.45);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --gh-paper: #0a1426;
+  --gh-paper-2: #0e1b33;
+  --gh-card: #10213f;
+  --gh-ink: #e9eff9;
+  --gh-ink-2: #b6c3da;
+  --gh-ink-3: #8b9bb8;
+  --gh-rule: #243a61;
+  --gh-rule-strong: #8fb0ee;
+  --gh-grid: rgba(143, 176, 238, 0.07);
+  --gh-grid-major: rgba(143, 176, 238, 0.13);
+
+  --gh-accent: #ff6a4d;
+  --gh-accent-hover: #ff8267;
+  --gh-accent-ink: #1c0a05;
+  --gh-accent-soft: #3a1c18;
+  --gh-link: #8fb0ee;
+
+  --gh-ok: #6fdc9c;
+  --gh-ok-soft: #123a2a;
+  --gh-warn: #e8c56c;
+  --gh-warn-soft: #3a2f16;
+  --gh-danger: #ff9488;
+  --gh-danger-soft: #3b1613;
+  --gh-info: #9db8f5;
+  --gh-info-soft: #162a52;
+
+  --gh-c0: #4a6bff;
+  --gh-c1: #29b6e0;
+  --gh-c2: #46c488;
+  --gh-c3: #ecc93f;
+  --gh-c4: #ff9a3c;
+  --gh-c5: #ff5a40;
+
+  --gh-shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 18px 34px -18px rgba(0, 0, 0, 0.7);
+  --gh-focus: 0 0 0 3px rgba(143, 176, 238, 0.55);
+}
+
+:root {
+  --gh-font-display: "Space Grotesk Variable", "Segoe UI", system-ui, sans-serif;
+  --gh-font-body: "Hanken Grotesk Variable", "Segoe UI", system-ui, sans-serif;
+  --gh-font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --gh-ramp: linear-gradient(
+    90deg,
+    var(--gh-c0),
+    var(--gh-c1) 20%,
+    var(--gh-c2) 40%,
+    var(--gh-c3) 60%,
+    var(--gh-c4) 80%,
+    var(--gh-c5)
+  );
+
+  --gh-gutter: clamp(16px, 4vw, 40px);
+  --gh-max: 1200px;
+  --gh-radius: 4px; /* drawings have square corners; just soften the edge */
+  --gh-header-h: 64px;
+}

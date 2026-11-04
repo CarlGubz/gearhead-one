@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /account
+Disallow: /pay/
+Disallow: /billing/

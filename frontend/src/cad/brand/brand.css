@@ -1,0 +1,23 @@
+.gh-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gh-ink);
+  text-decoration: none;
+}
+.gh-logo:hover {
+  color: var(--gh-ink);
+}
+.gh-logo__word {
+  font: 600 27px/1 var(--gh-font-display);
+  letter-spacing: -0.01em;
+}
+.gh-logo__tag {
+  margin-left: 6px;
+  padding: 2px 5px 1px;
+  font: 700 11px/1 var(--gh-font-mono);
+  letter-spacing: 0.12em;
+  vertical-align: 4px;
+  color: var(--gh-accent-ink);
+  background: var(--gh-accent);
+}

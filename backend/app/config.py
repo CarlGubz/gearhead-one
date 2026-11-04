@@ -1,0 +1,178 @@
+"""
+Runtime configuration, read once from environment variables.
+
+Every setting has a development-friendly default; `validate_for_production`
+refuses to start a production deployment that would be insecure (mock
+payments, plain-HTTP cookies, SQLite, missing PayMongo credentials, ...).
+"""
+from __future__ import annotations
+
+import os
+from dataclasses import dataclass, field
+from typing import List
+
+
+def _load_dotenv() -> None:
+    """Read KEY=VALUE lines from backend/.env or the repo-root .env. Real environment variables win."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    for path in (os.path.join(here, "..", ".env"), os.path.join(here, "..", "..", ".env")):
+        try:
+            with open(path, encoding="utf-8-sig") as fh:
+                lines = fh.read().splitlines()
+        except OSError:
+            continue
+        for line in lines:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, val = line.partition("=")
+            val = val.strip()
+            if len(val) >= 2 and val[0] == val[-1] and val[0] in "\"'":
+                val = val[1:-1]
+            if val:  # an empty `KEY=` placeholder must not shadow anything
+                os.environ.setdefault(key.strip(), val)
+
+
+_load_dotenv()
+
+
+def _bool(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in ("1", "true", "yes", "on")
+
+
+def _int(name: str, default: int) -> int:
+    try:
+        return int(os.getenv(name, default))
+    except ValueError:
+        return default
+
+
+def _list(name: str) -> List[str]:
+    return [x.strip().rstrip("/") for x in os.getenv(name, "").split(",") if x.strip()]
+
+
+@dataclass
+class Settings:
+    app_env: str = field(default_factory=lambda: os.getenv("APP_ENV", "development").lower())
+    database_url: str = field(default_factory=lambda: os.getenv("DATABASE_URL", "sqlite:///./webfea.db"))
+
+    # Public URL of the site (no trailing slash). Used for payment redirect
+    # URLs, e-mail links and the Origin check.
+    app_base_url: str = field(
+        default_factory=lambda: os.getenv("APP_BASE_URL", "http://localhost:5173").rstrip("/")
+    )
+    extra_allowed_origins: List[str] = field(default_factory=lambda: _list("ALLOWED_ORIGINS"))
+
+    # --- sessions / auth
+    session_cookie_name: str = "gh_session"
+    session_days: int = field(default_factory=lambda: _int("SESSION_DAYS", 14))
+    cookie_secure: bool = field(default=None)  # type: ignore[assignment]
+    max_failed_logins: int = field(default_factory=lambda: _int("MAX_FAILED_LOGINS", 5))
+    lockout_minutes: int = field(default_factory=lambda: _int("LOCKOUT_MINUTES", 15))
+    reset_token_minutes: int = field(default_factory=lambda: _int("RESET_TOKEN_MINUTES", 60))
+
+    # --- payments
+    payment_provider: str = field(default_factory=lambda: os.getenv("PAYMENT_PROVIDER", "mock").lower())
+    paymongo_secret_key: str = field(default_factory=lambda: os.getenv("PAYMONGO_SECRET_KEY", ""))
+    paymongo_webhook_secret: str = field(default_factory=lambda: os.getenv("PAYMONGO_WEBHOOK_SECRET", ""))
+
+    # --- plan limits (see plans.py)
+    free_max_projects: int = field(default_factory=lambda: _int("FREE_MAX_PROJECTS", 3))
+
+    # --- AI agent (see agent.py). No key for the chosen provider = the chat assistant is switched off.
+    # AGENT_PROVIDER: gemini | anthropic | openrouter | (empty = first of those with a key, in that order)
+    agent_provider_setting: str = field(default_factory=lambda: os.getenv("AGENT_PROVIDER", "").strip().lower())
+    gemini_api_key: str = field(default_factory=lambda: os.getenv("GEMINI_API_KEY", ""))
+    gemini_model: str = field(default_factory=lambda: os.getenv("GEMINI_MODEL", "gemini-2.5-pro"))
+    anthropic_api_key: str = field(default_factory=lambda: os.getenv("ANTHROPIC_API_KEY", ""))
+    agent_model: str = field(default_factory=lambda: os.getenv("AGENT_MODEL", "claude-sonnet-5-5"))
+    openrouter_api_key: str = field(default_factory=lambda: os.getenv("OPENROUTER_API_KEY", ""))
+    openrouter_model: str = field(default_factory=lambda: os.getenv("OPENROUTER_MODEL", "google/gemini-2.5-pro"))
+    agent_max_turns: int = field(default_factory=lambda: _int("AGENT_MAX_TURNS", 14))
+    agent_requests_per_minute: int = field(default_factory=lambda: _int("AGENT_REQUESTS_PER_MINUTE", 12))
+
+    # --- mail
+    smtp_host: str = field(default_factory=lambda: os.getenv("SMTP_HOST", ""))
+    smtp_port: int = field(default_factory=lambda: _int("SMTP_PORT", 587))
+    smtp_user: str = field(default_factory=lambda: os.getenv("SMTP_USER", ""))
+    smtp_password: str = field(default_factory=lambda: os.getenv("SMTP_PASSWORD", ""))
+    mail_from: str = field(default_factory=lambda: os.getenv("MAIL_FROM", "Gearhead FEA <no-reply@localhost>"))
+
+    def __post_init__(self):
+        # cookie_secure defaults to "on in production", overridable by env.
+        if self.cookie_secure is None:
+            self.cookie_secure = _bool("COOKIE_SECURE", self.app_env == "production")
+
+    @property
+    def agent_provider(self) -> str:
+        """Which LLM drives the assistant: 'gemini', 'anthropic' or 'openrouter'.
+
+        An explicit AGENT_PROVIDER wins; otherwise the first provider with a key, in that order.
+        """
+        if self.agent_provider_setting in ("gemini", "anthropic", "openrouter"):
+            return self.agent_provider_setting
+        for name in ("gemini", "anthropic", "openrouter"):
+            if self._provider_key(name):
+                return name
+        return "gemini"
+
+    def _provider_key(self, name: str) -> str:
+        return {"gemini": self.gemini_api_key, "anthropic": self.anthropic_api_key,
+                "openrouter": self.openrouter_api_key}[name]
+
+    @property
+    def agent_active_model(self) -> str:
+        return {"gemini": self.gemini_model, "anthropic": self.agent_model,
+                "openrouter": self.openrouter_model}[self.agent_provider]
+
+    @property
+    def agent_configured(self) -> bool:
+        return bool(self._provider_key(self.agent_provider))
+
+    @property
+    def is_production(self) -> bool:
+        return self.app_env == "production"
+
+    @property
+    def is_postgres(self) -> bool:
+        return self.database_url.startswith("postgresql")
+
+    @property
+    def sqlalchemy_url(self) -> str:
+        """Normalise common Postgres URL spellings to the psycopg v3 driver."""
+        url = self.database_url
+        for prefix in ("postgres://", "postgresql://"):
+            if url.startswith(prefix):
+                return "postgresql+psycopg://" + url[len(prefix):]
+        return url
+
+    @property
+    def allowed_origins(self) -> List[str]:
+        return [self.app_base_url, *self.extra_allowed_origins]
+
+    def validate_for_production(self) -> None:
+        if not self.is_production:
+            return
+        problems = []
+        if not self.is_postgres:
+            problems.append("DATABASE_URL must point at PostgreSQL in production")
+        if not self.cookie_secure:
+            problems.append("COOKIE_SECURE must be enabled in production (serve over HTTPS)")
+        if not self.app_base_url.startswith("https://"):
+            problems.append("APP_BASE_URL must be an https:// URL in production")
+        if self.payment_provider == "mock":
+            problems.append("PAYMENT_PROVIDER=mock is not allowed in production (use paymongo)")
+        if self.payment_provider == "paymongo":
+            if not self.paymongo_secret_key:
+                problems.append("PAYMONGO_SECRET_KEY is required")
+            if not self.paymongo_webhook_secret:
+                problems.append("PAYMONGO_WEBHOOK_SECRET is required")
+        if problems:
+            raise RuntimeError("Refusing to start in production:\n - " + "\n - ".join(problems))
+
+
+settings = Settings()
+settings.validate_for_production()

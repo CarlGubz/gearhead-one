@@ -1,0 +1,483 @@
+/* ---------------------------------------------------------------- Button */
+.gh-btn {
+  --btn-bg: var(--gh-accent);
+  --btn-fg: var(--gh-accent-ink);
+  --btn-bd: var(--gh-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 22px;
+  font: 600 15px/1 var(--gh-font-body);
+  letter-spacing: 0.01em;
+  color: var(--btn-fg);
+  background: var(--btn-bg);
+  border: 1.5px solid var(--btn-bd);
+  border-radius: var(--gh-radius);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 3px 3px 0 var(--gh-ink);
+}
+.gh-btn:hover:not(:disabled):not([aria-disabled="true"]) {
+  --btn-bg: var(--gh-accent-hover);
+  --btn-bd: var(--gh-accent-hover);
+  color: var(--btn-fg);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--gh-ink);
+}
+.gh-btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--gh-ink);
+}
+.gh-btn--secondary {
+  --btn-bg: transparent;
+  --btn-fg: var(--gh-ink);
+  --btn-bd: var(--gh-ink);
+}
+.gh-btn--secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+  --btn-bg: var(--gh-ink);
+  --btn-bd: var(--gh-ink);
+  color: var(--gh-paper);
+}
+.gh-btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--gh-ink);
+  --btn-bd: transparent;
+  box-shadow: none;
+}
+.gh-btn--ghost:hover:not(:disabled):not([aria-disabled="true"]) {
+  --btn-bg: var(--gh-paper-2);
+  --btn-bd: var(--gh-paper-2);
+  color: var(--gh-ink);
+  transform: none;
+  box-shadow: none;
+}
+.gh-btn--danger {
+  --btn-bg: transparent;
+  --btn-fg: var(--gh-danger);
+  --btn-bd: var(--gh-danger);
+  box-shadow: none;
+}
+.gh-btn--danger:hover:not(:disabled) {
+  --btn-bg: var(--gh-danger-soft);
+  --btn-bd: var(--gh-danger);
+  color: var(--gh-danger);
+  transform: none;
+  box-shadow: none;
+}
+.gh-btn--sm {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 14px;
+  box-shadow: 2px 2px 0 var(--gh-ink);
+}
+.gh-btn--lg {
+  min-height: 54px;
+  padding: 0 28px;
+  font-size: 16px;
+}
+.gh-btn--block {
+  width: 100%;
+}
+.gh-btn:disabled,
+.gh-btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------- Spinner */
+.gh-spinner {
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: gh-spin 0.7s linear infinite;
+}
+@keyframes gh-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ------------------------------------------------------------- TextField */
+.gh-field {
+  display: grid;
+  gap: 6px;
+}
+.gh-field__label {
+  font: 600 13px/1 var(--gh-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gh-ink-2);
+}
+.gh-field__control {
+  position: relative;
+  display: flex;
+}
+.gh-field__input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  font: 400 16px/1.2 var(--gh-font-body);
+  color: var(--gh-ink);
+  background: var(--gh-card);
+  border: 1.5px solid var(--gh-ink-3);
+  border-radius: var(--gh-radius);
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.gh-field__input::placeholder {
+  color: var(--gh-ink-3);
+  opacity: 0.8;
+}
+.gh-field__input:hover {
+  border-color: var(--gh-ink);
+}
+.gh-field__input:focus {
+  outline: none;
+  border-color: var(--gh-link);
+  box-shadow: var(--gh-focus);
+}
+.gh-field--error .gh-field__input {
+  border-color: var(--gh-danger);
+}
+.gh-field__toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: 0;
+  padding: 8px 10px;
+  font: 600 12px/1 var(--gh-font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gh-ink-2);
+  cursor: pointer;
+}
+.gh-field__toggle:hover {
+  color: var(--gh-accent);
+}
+.gh-field__hint {
+  font-size: 13.5px;
+  color: var(--gh-ink-3);
+}
+.gh-field__error {
+  font-size: 13.5px;
+  color: var(--gh-danger);
+  font-weight: 500;
+}
+
+/* ----------------------------------------------------------------- Alert */
+.gh-alert {
+  --tone: var(--gh-info);
+  --tone-bg: var(--gh-info-soft);
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--gh-ink);
+  background: var(--tone-bg);
+  border-left: 4px solid var(--tone);
+  border-radius: 0 var(--gh-radius) var(--gh-radius) 0;
+}
+.gh-alert::before {
+  content: "i";
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font: 700 13px/1 var(--gh-font-mono);
+  background: var(--tone);
+  color: var(--gh-paper);
+}
+.gh-alert--success {
+  --tone: var(--gh-ok);
+  --tone-bg: var(--gh-ok-soft);
+}
+.gh-alert--success::before {
+  content: "✓";
+}
+.gh-alert--warn {
+  --tone: var(--gh-warn);
+  --tone-bg: var(--gh-warn-soft);
+}
+.gh-alert--warn::before {
+  content: "!";
+}
+.gh-alert--danger {
+  --tone: var(--gh-danger);
+  --tone-bg: var(--gh-danger-soft);
+}
+.gh-alert--danger::before {
+  content: "!";
+}
+
+/* ----------------------------------------------------------------- Badge */
+.gh-badge {
+  --tone: var(--gh-ink-2);
+  --tone-bg: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  font: 600 11.5px/1 var(--gh-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tone);
+  background: var(--tone-bg);
+  border: 1.5px solid var(--tone);
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.gh-badge--accent {
+  --tone: var(--gh-accent);
+  --tone-bg: var(--gh-accent-soft);
+}
+.gh-badge--ok {
+  --tone: var(--gh-ok);
+  --tone-bg: var(--gh-ok-soft);
+}
+.gh-badge--warn {
+  --tone: var(--gh-warn);
+  --tone-bg: var(--gh-warn-soft);
+}
+.gh-badge--danger {
+  --tone: var(--gh-danger);
+  --tone-bg: var(--gh-danger-soft);
+}
+
+/* ------------------------------------------------------------------ Card */
+/* Drafting "registration marks" on two opposite corners. */
+.gh-card {
+  position: relative;
+  background: var(--gh-card);
+  border: 1.5px solid var(--gh-rule-strong);
+  border-radius: var(--gh-radius);
+  padding: clamp(20px, 3vw, 32px);
+  box-shadow: var(--gh-shadow);
+}
+.gh-card::before,
+.gh-card::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 0 solid var(--gh-accent);
+  pointer-events: none;
+}
+.gh-card::before {
+  top: -6px;
+  left: -6px;
+  border-top-width: 3px;
+  border-left-width: 3px;
+}
+.gh-card::after {
+  bottom: -6px;
+  right: -6px;
+  border-bottom-width: 3px;
+  border-right-width: 3px;
+}
+.gh-card--flat {
+  box-shadow: none;
+}
+.gh-card--flat::before,
+.gh-card--flat::after {
+  display: none;
+}
+.gh-card--accent {
+  border-color: var(--gh-accent);
+  box-shadow: 6px 6px 0 var(--gh-accent);
+}
+
+/* ------------------------------------------------------- DimensionLine */
+/* ├──── 01 / LABEL ────┤  — the eyebrow used above every section heading. */
+.gh-dim {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--gh-ink-2);
+  font: 500 12.5px/1 var(--gh-font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.gh-dim__line {
+  flex: 1;
+  height: 9px;
+  min-width: 24px;
+  background:
+    linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat,
+    linear-gradient(currentColor, currentColor) left center / 1px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) right center / 1px 100% no-repeat;
+  opacity: 0.6;
+}
+.gh-dim__line--short {
+  flex: 0 0 56px;
+}
+.gh-dim__no {
+  color: var(--gh-accent);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------- SectionHeading */
+.gh-section {
+  padding-block: clamp(64px, 9vw, 120px);
+}
+.gh-section--tint {
+  background: color-mix(in srgb, var(--gh-paper-2) 88%, transparent);
+  border-block: 1.5px solid var(--gh-rule);
+}
+.gh-sh {
+  display: grid;
+  gap: 18px;
+  max-width: 760px;
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+.gh-sh__title {
+  font-size: clamp(32px, 4.4vw, 52px);
+}
+.gh-sh__title em {
+  color: var(--gh-accent);
+}
+.gh-sh__lede {
+  color: var(--gh-ink-2);
+  font-size: clamp(17px, 1.6vw, 19px);
+  max-width: 62ch;
+}
+.gh-sh--center {
+  margin-inline: auto;
+  text-align: center;
+  justify-items: center;
+}
+.gh-sh--center .gh-dim {
+  width: min(420px, 100%);
+}
+
+/* ------------------------------------------------------------ ContourBar */
+.gh-contour {
+  display: grid;
+  gap: 6px;
+  font: 500 11.5px/1 var(--gh-font-mono);
+  letter-spacing: 0.06em;
+  color: var(--gh-ink-2);
+}
+.gh-contour__bar {
+  height: 12px;
+  border: 1.5px solid var(--gh-rule-strong);
+  background: var(--gh-ramp);
+}
+.gh-contour__labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ----------------------------------------------------------------- Modal */
+.gh-modal {
+  width: min(520px, calc(100vw - 32px));
+  padding: 0;
+  color: var(--gh-ink);
+  background: var(--gh-card);
+  border: 1.5px solid var(--gh-ink);
+  border-radius: var(--gh-radius);
+  box-shadow: 8px 8px 0 var(--gh-accent);
+}
+.gh-modal::backdrop {
+  background: color-mix(in srgb, var(--gh-paper) 55%, #000 45%);
+  opacity: 0.85;
+}
+.gh-modal__body {
+  display: grid;
+  gap: 16px;
+  padding: 28px;
+}
+.gh-modal__title {
+  font-size: 34px;
+}
+.gh-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+/* ------------------------------------------------------------- Accordion */
+.gh-acc {
+  border-top: 1.5px solid var(--gh-rule-strong);
+}
+.gh-acc__item {
+  border-bottom: 1.5px solid var(--gh-rule-strong);
+}
+.gh-acc__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px 4px;
+  cursor: pointer;
+  list-style: none;
+  font: 600 clamp(22px, 2.6vw, 28px) / 1.15 var(--gh-font-display);
+}
+.gh-acc__summary::-webkit-details-marker {
+  display: none;
+}
+.gh-acc__summary::after {
+  content: "+";
+  flex: none;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  font: 400 22px/1 var(--gh-font-mono);
+  border: 1.5px solid currentColor;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.gh-acc__item[open] > .gh-acc__summary::after {
+  content: "–";
+  background: var(--gh-accent);
+  border-color: var(--gh-accent);
+  color: var(--gh-accent-ink);
+}
+.gh-acc__summary:hover {
+  color: var(--gh-accent);
+}
+.gh-acc__panel {
+  padding: 0 4px 24px;
+  max-width: 70ch;
+  color: var(--gh-ink-2);
+}
+
+/* ------------------------------------------------------------ Data table */
+.gh-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+.gh-table th {
+  text-align: left;
+  padding: 10px 12px;
+  font: 600 11.5px/1 var(--gh-font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gh-ink-2);
+  border-bottom: 1.5px solid var(--gh-rule-strong);
+}
+.gh-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--gh-rule);
+  vertical-align: middle;
+}
+.gh-table .num {
+  text-align: right;
+  font-family: var(--gh-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.gh-table-wrap {
+  overflow-x: auto;
+}

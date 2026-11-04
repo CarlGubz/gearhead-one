@@ -1,0 +1,22 @@
+# Optional overlay: lets the containerised backend start OpenFOAM / FEniCSx / PyFR containers on the host for the
+# CFD workspace (otherwise their pure-Python fallbacks run).
+#   CFD_HOST_DATA_DIR=$PWD/cfd-runs docker compose -f docker-compose.yml -f docker-compose.solvers.yml up -d --build
+# The CFD run directory becomes a host bind mount, so the solver containers can mount the same path.
+# Mounting the Docker socket gives the backend control of the host's Docker: use it only on trusted hosts.
+services:
+  backend:
+    build:
+      context: ./backend
+      args:
+        WITH_DOCKER_CLI: "1"
+    user: root          # needs access to the Docker socket
+    environment:
+      CFD_OPENFOAM_LAUNCHER: ${CFD_OPENFOAM_LAUNCHER:-auto}
+      CFD_FENICSX_LAUNCHER: ${CFD_FENICSX_LAUNCHER:-auto}
+      CFD_PYFR_LAUNCHER: ${CFD_PYFR_LAUNCHER:-auto}
+      CFD_DATA_DIR: /cfd-runs
+      CFD_DOCKER_PATH_MAP: /cfd-runs=${CFD_HOST_DATA_DIR:?set CFD_HOST_DATA_DIR to an absolute host directory}
+      CFD_DOCKER_AS_ROOT: "1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CFD_HOST_DATA_DIR}:/cfd-runs

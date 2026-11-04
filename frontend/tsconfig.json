@@ -1,0 +1,19 @@
+{
+  "//": "Type-checks the TypeScript workspaces (CFD: src/cfd, CAD: src/cad). The FEA workspace and the site are JavaScript.",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "types": ["vite/client"]
+  },
+  "include": ["src/cfd", "src/cad"]
+}

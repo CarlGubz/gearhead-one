@@ -1,0 +1,76 @@
+# Production-shaped stack: PostgreSQL + API (FEA + CFD + CAD) + nginx(SPA, /api proxy).
+# The database keeps the name `webfea`, so an existing Gearhead FEA deployment upgrades in place.
+# External CFD solvers in containers: add -f docker-compose.solvers.yml (see that file).
+#   cp .env.example .env   # then fill in secrets
+#   docker compose up --build -d
+# Local dev defaults use the mock GCash provider and plain-HTTP cookies.
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: webfea
+      POSTGRES_USER: webfea
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webfea -d webfea"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      APP_BASE_URL: ${APP_BASE_URL:-http://localhost:5173}
+      DATABASE_URL: postgresql://webfea:${POSTGRES_PASSWORD}@db:5432/webfea
+      PAYMENT_PROVIDER: ${PAYMENT_PROVIDER:-mock}
+      PAYMONGO_SECRET_KEY: ${PAYMONGO_SECRET_KEY:-}
+      PAYMONGO_WEBHOOK_SECRET: ${PAYMONGO_WEBHOOK_SECRET:-}
+      COOKIE_SECURE: ${COOKIE_SECURE:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-pro}
+      AGENT_PROVIDER: ${AGENT_PROVIDER:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_MODEL: ${OPENROUTER_MODEL:-google/gemini-2.5-pro}
+      AGENT_MODEL: ${AGENT_MODEL:-claude-sonnet-5-5}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      MAIL_FROM: ${MAIL_FROM:-Gearhead <no-reply@localhost>}
+      # ---- CFD workspace (app/cfd)
+      CFD_MAX_CONCURRENT_RUNS: ${CFD_MAX_CONCURRENT_RUNS:-2}
+      CFD_MAX_CELLS: ${CFD_MAX_CELLS:-250000}
+      CFD_OPENFOAM_LAUNCHER: ${CFD_OPENFOAM_LAUNCHER:-auto}
+      CFD_FENICSX_LAUNCHER: ${CFD_FENICSX_LAUNCHER:-auto}
+      CFD_PYFR_LAUNCHER: ${CFD_PYFR_LAUNCHER:-auto}
+      # ---- CAD workspace (app/cad)
+      MAX_FEA_ELEMENTS: ${MAX_FEA_ELEMENTS:-120000}
+      MAX_TOOLPATH_POINTS: ${MAX_TOOLPATH_POINTS:-400000}
+      CCX_TIMEOUT: ${CCX_TIMEOUT:-1800}
+    volumes:
+      - appdata:/app/data          # CFD run results + uploaded CAD STEP files
+    # no `ports:` on purpose - reachable only through the frontend container
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_CONTACT_EMAIL: ${CONTACT_EMAIL:-}
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${HTTP_PORT:-5173}:80"
+
+volumes:
+  pgdata:
+  appdata:

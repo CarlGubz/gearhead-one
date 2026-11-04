@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gearhead FEA — finite element analysis in your browser</title>
+    <meta
+      name="description"
+      content="Model, mesh, load and solve static, modal and thermal finite element analyses in your browser. Free to start; Pro paid in pesos with GCash."
+    />
+    <meta name="theme-color" content="#f3eee2" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Gearhead FEA — test the part before you cut the metal" />
+    <meta
+      property="og:description"
+      content="Browser-based finite element analysis: static, modal and thermal. Pay with GCash."
+    />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("webfea-theme");
+          var theme = saved || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <noscript>Gearhead FEA needs JavaScript to run the simulator.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

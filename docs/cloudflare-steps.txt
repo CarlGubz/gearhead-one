@@ -1,0 +1,20 @@
+# install cloudflared (Ubuntu/Debian)
+curl -L https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
+echo "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main" | sudo tee /etc/apt/sources.list.d/cloudflared.list
+sudo apt update && sudo apt install -y cloudflared
+
+cloudflared tunnel login
+cloudflared tunnel create webfea
+cloudflared tunnel route dns webfea app.example.com
+
+
+tunnel: webfea
+credentials-file: /root/.cloudflared/<TUNNEL-ID>.json
+ingress:
+  - hostname: app.example.com
+    service: http://localhost:80
+  - service: http_status:404
+
+
+sudo cloudflared service install
+sudo systemctl enable --now cloudflared
