@@ -13,13 +13,13 @@ export function Hero() {
     <section className="gh-hero" aria-labelledby="hero-title">
       <Container className="gh-hero__inner">
         <div className="gh-hero__copy">
-          <DimensionLine short>Finite element analysis</DimensionLine>
+          <DimensionLine short>CAD · CFD · CAE</DimensionLine>
           <h1 id="hero-title" className="gh-hero__title">
-            Test the part <em>before</em> you cut the metal.
+            Design it, flow it, stress it — <em>in one workspace.</em>
           </h1>
           <p className="gh-hero__lede">
-            Build a model, mesh it, pin it down, load it and watch the stress bloom across it — static, modal and
-            thermal analysis with nothing to install.
+            Gearhead One joins parametric CAD, computational fluid dynamics and finite element analysis around a single
+            project. Model a part, send it to the solvers and read the results, with nothing to install.
           </p>
           <div className="gh-hero__cta">
             {user ? (
@@ -30,7 +30,7 @@ export function Hero() {
             <Button to="/pricing" variant="secondary" size="lg">See pricing</Button>
           </div>
           <ul className="gh-hero__facts" aria-label="At a glance">
-            <li><strong>8</strong> analysis types</li>
+            <li><strong>3</strong> engineering workspaces</li>
             <li><strong>0</strong> installs</li>
             <li><strong>₱0</strong> to begin</li>
           </ul>
@@ -41,8 +41,26 @@ export function Hero() {
   );
 }
 
-/* -------------------------------------------------------------- Features */
-const IconStatic = () => (
+/* ----------------------------------------------------------------- Suite */
+const IconCad = () => (
+  <svg viewBox="0 0 96 56" className="gh-ficon" aria-hidden="true">
+    <path d="M12 38 36 26l24 12-24 12z" fill="var(--gh-paper)" stroke="var(--gh-ink)" strokeWidth="2" strokeLinejoin="round" />
+    <path d="M12 38V22l24-12 24 12v16M36 26V10" fill="none" stroke="var(--gh-ink)" strokeWidth="2" strokeLinejoin="round" />
+    <path d="M66 14h22M66 14v-4m22 4v-4M66 30h22" stroke="var(--gh-accent)" strokeWidth="2" strokeLinecap="round" />
+    <circle cx="77" cy="42" r="8" fill="none" stroke="var(--gh-accent)" strokeWidth="2" />
+  </svg>
+);
+const IconCfd = () => (
+  <svg viewBox="0 0 96 56" className="gh-ficon" aria-hidden="true">
+    <rect x="6" y="8" width="84" height="40" fill="none" stroke="var(--gh-ink)" strokeWidth="2" />
+    {[[14, "--gh-c0", 6], [22, "--gh-c2", 12], [34, "--gh-c4", 44], [42, "--gh-c5", 50]].map(([y, c, bend]) => (
+      <path key={y} d={`M6 ${y}C34 ${y} 40 ${bend} 48 ${bend}S68 ${y} 90 ${y}`}
+        fill="none" stroke={`var(${c})`} strokeWidth="2.6" strokeLinecap="round" />
+    ))}
+    <circle cx="48" cy="28" r="6" fill="var(--gh-ink)" fillOpacity=".2" stroke="var(--gh-ink)" strokeWidth="2" />
+  </svg>
+);
+const IconCae = () => (
   <svg viewBox="0 0 96 56" className="gh-ficon" aria-hidden="true">
     <defs>
       <linearGradient id="gh-g1" x1="0" x2="1">
@@ -57,80 +75,86 @@ const IconStatic = () => (
     <path d="M10 48h76" stroke="var(--gh-ink-3)" strokeWidth="1.5" strokeDasharray="3 3" />
   </svg>
 );
-const IconModal = () => (
-  <svg viewBox="0 0 96 56" className="gh-ficon" aria-hidden="true">
-    <path d="M6 28h84" stroke="var(--gh-ink-3)" strokeWidth="1.5" strokeDasharray="3 3" />
-    <path d="M6 28C22 2 38 2 48 28S74 54 90 28" fill="none" stroke="var(--gh-c0)" strokeWidth="3" strokeLinecap="round" />
-    <path d="M6 28C20 14 34 14 48 28S76 42 90 28" fill="none" stroke="var(--gh-accent)" strokeWidth="3" strokeLinecap="round" />
-    <circle cx="48" cy="28" r="3.5" fill="var(--gh-ink)" />
-  </svg>
-);
-const IconThermal = () => (
-  <svg viewBox="0 0 96 56" className="gh-ficon" aria-hidden="true">
-    <defs>
-      <linearGradient id="gh-g3" x1="0" x2="1">
-        <stop offset="0" stopColor="var(--gh-c5)" />
-        <stop offset=".35" stopColor="var(--gh-c4)" />
-        <stop offset=".65" stopColor="var(--gh-c2)" />
-        <stop offset="1" stopColor="var(--gh-c0)" />
-      </linearGradient>
-    </defs>
-    <rect x="8" y="12" width="80" height="32" fill="url(#gh-g3)" stroke="var(--gh-ink)" strokeWidth="2" />
-    {[24, 40, 56, 72].map((x) => (
-      <path key={x} d={`M${x} 12v32`} stroke="var(--gh-ink)" strokeOpacity=".28" strokeWidth="1" />
-    ))}
-    <path d="M8 28h80" stroke="var(--gh-ink)" strokeOpacity=".28" strokeWidth="1" />
-  </svg>
-);
 
-const FEATURES = [
+const SUITE = [
   {
-    icon: <IconStatic />,
-    title: "Static structural",
-    tag: null,
-    body: "Supports, forces, pressure, gravity and centrifugal loads — linear, or nonlinear with plasticity. Read stress, strain, reactions and displacement as colour contours.",
+    key: "cad",
+    icon: <IconCad />,
+    name: "CAD",
+    title: "Design",
+    to: "/app/cad",
+    body: "Parametric 2-D sketches with a constraint solver, 3-D feature modelling, assemblies with mates, drawing sheets, and CAM toolpaths with G-code.",
+    points: ["Sketch, extrude, revolve, fillet", "Assemblies and drawings", "CAM and G-code output"],
   },
   {
-    icon: <IconModal />,
-    title: "Modes & buckling",
-    tag: "Pro",
-    body: "Find the natural frequencies and buckling loads of a part and scrub through animated mode shapes to see exactly how it wants to move.",
+    key: "cfd",
+    icon: <IconCfd />,
+    name: "CFD",
+    title: "Flow",
+    to: "/app/cfd",
+    body: "Set up a case, run it on the server and inspect velocity, pressure and temperature fields, with validated examples to start from.",
+    points: ["Guided setup, mesh and run", "Live residual monitors", "OpenFOAM, FEniCSx and PyFR backends"],
   },
   {
-    icon: <IconThermal />,
-    title: "Heat transfer",
-    tag: "Pro",
-    body: "Fixed temperatures, heat sources, convection and radiation — steady or transient — plus thermal stress from the resulting field.",
+    key: "cae",
+    icon: <IconCae />,
+    name: "CAE",
+    title: "Stress",
+    to: "/app",
+    body: "Finite element analysis: constrain and load the model, then read stress, strain, reactions and displacement as colour contours.",
+    points: ["Static, nonlinear, modal, buckling", "Steady and transient heat transfer", "Tet, brick, shell and beam elements"],
   },
 ];
 
+export function Suite() {
+  const { user } = useAuth();
+  return (
+    <Section id="suite" labelledBy="suite-title">
+      <SectionHeading
+        no="01"
+        eyebrow="The suite"
+        id="suite-title"
+        title={<>Three disciplines. <em>One</em> project.</>}
+        lede="Each workspace is a full tool on its own. Because they share a project, geometry and loads move between them instead of being rebuilt in a separate program."
+      />
+      <div className="gh-grid-3">
+        {SUITE.map((p) => (
+          <Card key={p.key} as="article" className="gh-feature">
+            {p.icon}
+            <h3 className="gh-feature__title">
+              {p.name} <Badge tone="accent">{p.title}</Badge>
+            </h3>
+            <p>{p.body}</p>
+            <ul className="gh-suite__points">
+              {p.points.map((t) => <li key={t}>{t}</li>)}
+            </ul>
+            <Link to={user ? p.to : "/register"} className="gh-suite__link">
+              {user ? `Open ${p.name}` : `Try ${p.name}`} →
+            </Link>
+          </Card>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+/* -------------------------------------------------------------- Features */
 const EXTRAS = [
-  ["Pick-and-place pre-processor", "Box, cylinder and sphere primitives with adjustable tetrahedral meshing. Click faces in 3D to select what you constrain and load."],
-  ["A standalone solver", "Our own sparse FE engine — tetra and brick elements, linear and quadratic — runs on the server. Nothing else to install, nothing to license."],
-  ["Your work, saved", "Projects live in your account, so your models, loads and results are there on any machine."],
+  ["One project, three views", "Geometry and loads transfer between CAD, CFD and FEA from the Transfer tool, so a design change reaches every analysis."],
+  ["Real solvers, nothing to install", "Our own sparse FE engine, Gmsh, OpenCascade and CalculiX run on the server. Your browser only draws the results."],
+  ["Your work, saved", "Projects live in your account, so your models, cases and results are there on any machine."],
 ];
 
 export function Features() {
   return (
     <Section id="features" tint labelledBy="features-title">
       <SectionHeading
-        no="01"
-        eyebrow="Capabilities"
+        no="02"
+        eyebrow="Integration"
         id="features-title"
-        title={<>Eight analyses. <em>One</em> workspace.</>}
-        lede="The same loop engineers use in desktop pre/post-processors — model, constrain, solve, inspect — running in a tab."
+        title={<>Change the part once. <em>Re-run</em> everything.</>}
+        lede="The usual loop of exporting STEP files, re-meshing and re-applying loads in three programs becomes one step in one tab."
       />
-      <div className="gh-grid-3">
-        {FEATURES.map((f) => (
-          <Card key={f.title} as="article" className="gh-feature">
-            {f.icon}
-            <h3 className="gh-feature__title">
-              {f.title} {f.tag && <Badge tone="accent">{f.tag}</Badge>}
-            </h3>
-            <p>{f.body}</p>
-          </Card>
-        ))}
-      </div>
       <dl className="gh-extras">
         {EXTRAS.map(([t, d]) => (
           <div key={t}>
@@ -145,20 +169,20 @@ export function Features() {
 
 /* -------------------------------------------------------------- Workflow */
 const STEPS = [
-  ["Model", "Pick a primitive, set its dimensions and choose a mesh density. A tetrahedral volume mesh is generated for you."],
-  ["Constrain & load", "Click faces to select them, then pin them in place and apply forces, pressure, gravity or heat."],
-  ["Solve", "One click. Jobs run on the server while a progress bar keeps you posted — typically seconds for a few thousand nodes."],
-  ["Inspect", "Switch between stress, displacement and temperature contours, scale the deformation and animate mode shapes."],
+  ["Design in CAD", "Sketch and model the part, add mates and drawings, and generate toolpaths when it is ready to make."],
+  ["Send it on", "Transfer the geometry to CFD and FEA. The mesh is built for you from the CAD model."],
+  ["Flow and load", "Run the fluid case for pressures and temperatures, then constrain and load the structure."],
+  ["Inspect and iterate", "Read the contours, go back to CAD, change a dimension and run the loop again."],
 ];
 
 export function Workflow() {
   return (
     <Section id="workflow" labelledBy="workflow-title">
       <SectionHeading
-        no="02"
+        no="03"
         eyebrow="Workflow"
         id="workflow-title"
-        title={<>From blank sheet to <em>contour plot</em> in four moves.</>}
+        title={<>From blank sheet to <em>verified design</em> in four moves.</>}
       />
       <ol className="gh-steps">
         {STEPS.map(([t, d], i) => (
@@ -178,7 +202,7 @@ export function PricingSection() {
   return (
     <Section id="pricing" tint labelledBy="pricing-title">
       <SectionHeading
-        no="03"
+        no="04"
         eyebrow="Pricing"
         id="pricing-title"
         center
@@ -194,7 +218,7 @@ export function PricingSection() {
 export const FAQ = [
   {
     q: "Do I need to install anything?",
-    a: "No. Gearhead FEA runs in a modern browser with WebGL. The standalone solver runs on our server, so even a modest laptop is fine.",
+    a: "No. Gearhead One (CAD, CFD and FEA) runs in a modern browser with WebGL. The solvers run on our server, so even a modest laptop is fine.",
   },
   {
     q: "How does paying with GCash work?",
@@ -222,7 +246,7 @@ export function FaqSection() {
   return (
     <Section id="faq" labelledBy="faq-title">
       <div className="gh-faq">
-        <SectionHeading no="04" eyebrow="Questions" id="faq-title" title={<>Straight <em>answers</em>.</>} />
+        <SectionHeading no="05" eyebrow="Questions" id="faq-title" title={<>Straight <em>answers</em>.</>} />
         <Accordion items={FAQ} />
       </div>
     </Section>
@@ -235,7 +259,7 @@ export function CtaBand() {
   return (
     <section className="gh-cta" aria-labelledby="cta-title">
       <Container className="gh-cta__inner">
-        <h2 id="cta-title" className="gh-cta__title">Your first stress plot is a minute away.</h2>
+        <h2 id="cta-title" className="gh-cta__title">Your first design, flow and stress plot are a minute away.</h2>
         <div className="gh-cta__actions">
           {user ? (
             <Button to="/app" size="lg">Open workspace</Button>

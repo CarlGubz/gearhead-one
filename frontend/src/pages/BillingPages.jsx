@@ -288,7 +288,7 @@ export function MockGcash() {
         {!payment && !error && <p><Spinner /> Loading…</p>}
         {payment && (
           <>
-            <p className="gh-mock__to">Pay to <strong>Gearhead FEA</strong></p>
+            <p className="gh-mock__to">Pay to <strong>Gearhead One</strong></p>
             <p className="gh-mock__amt">{peso(payment.amount)}</p>
             <p className="gh-muted">{payment.plan_name}</p>
             <div className="gh-mock__btns">

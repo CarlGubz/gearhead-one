@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { usePageTitle } from "../hooks/hooks.js";
 import { Accordion, Button, Container, SectionHeading, Section } from "../ui";
-import { CtaBand, FAQ, FaqSection, Features, Hero, PricingSection, Workflow } from "../site/sections.jsx";
+import { CtaBand, FAQ, FaqSection, Features, Hero, PricingSection, Suite, Workflow } from "../site/sections.jsx";
 import PricingTable from "../site/PricingTable.jsx";
 
 export function Home() {
@@ -10,6 +10,7 @@ export function Home() {
   return (
     <>
       <Hero />
+      <Suite />
       <Features />
       <Workflow />
       <PricingSection />
@@ -74,13 +75,13 @@ export function Terms() {
   return (
     <Legal title="Terms of Service" updated="October 2026">
       <p>
-        These terms govern your use of Gearhead FEA (the "Service"). By creating an account you agree to them.
+        These terms govern your use of Gearhead One (the "Service"). By creating an account you agree to them.
         <strong> Template notice:</strong> have these reviewed by qualified counsel and replace the operator details
         before launch.
       </p>
       <h2>1. The Service</h2>
       <p>
-        Gearhead FEA provides browser-based finite element analysis tools. Results are estimates produced by a
+        Gearhead One provides browser-based CAD, CFD and finite element analysis (CAE) tools. Results are estimates produced by a
         simplified linear solver and are provided for exploration and education. They are not a substitute for
         professional engineering verification, and you are responsible for any decisions made using them.
       </p>
@@ -115,7 +116,7 @@ export function Privacy() {
   return (
     <Legal title="Privacy Policy" updated="October 2026">
       <p>
-        This policy explains what Gearhead FEA collects and why, consistent with the Philippine Data Privacy Act of 2012.
+        This policy explains what Gearhead One collects and why, consistent with the Philippine Data Privacy Act of 2012.
         <strong> Template notice:</strong> have this reviewed by qualified counsel and complete the operator details
         before launch.
       </p>

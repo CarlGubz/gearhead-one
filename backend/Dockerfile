@@ -1,3 +1,4 @@
+# Pinned to bookworm: the unpinned tag now resolves to Debian trixie, which no longer ships calculix-ccx
 FROM python:3.12-slim-bookworm
 
 WORKDIR /app

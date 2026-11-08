@@ -454,3 +454,9 @@
 .gh-auth-art .gh-hero-fig__frame {
   box-shadow: 6px 6px 0 var(--gh-ink);
 }
+
+/* suite cards (home page) */
+.gh-suite__points { margin: 0 0 1rem; padding-left: 1.1rem; color: var(--gh-ink-2); font-size: .9rem; }
+.gh-suite__points li { margin: .15rem 0; }
+.gh-suite__link { font-weight: 600; color: var(--gh-accent); text-decoration: none; }
+.gh-suite__link:hover { text-decoration: underline; }

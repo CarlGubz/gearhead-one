@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { errorMessage, startCheckout } from "../api.js";
 
-const SUFFIX = "Gearhead FEA";
+const SUFFIX = "Gearhead One";
 
-/** Sets document.title for the page ("Pricing · Gearhead FEA"). */
+/** Sets document.title for the page ("Pricing · Gearhead One"). */
 export function usePageTitle(title) {
   useEffect(() => {
-    document.title = title ? `${title} · ${SUFFIX}` : `${SUFFIX} — finite element analysis in your browser`;
+    document.title = title ? `${title} · ${SUFFIX}` : `${SUFFIX} — CAD, CFD and CAE in your browser`;
   }, [title]);
 }
 

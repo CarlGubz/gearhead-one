@@ -35,8 +35,8 @@ export function LogoMark({ size = 28 }) {
   );
 }
 
-/** `tag` is the product badge: FEA on the site, the open workspace (FEA / CFD / CAD) in the workspace app bar. */
-export function Logo({ to = "/", compact, tag = "FEA" }) {
+/** `tag` is the product badge: "One" (the whole suite) on the site, the open workspace (FEA / CFD / CAD) in the workspace app bar. */
+export function Logo({ to = "/", compact, tag = "One" }) {
   return (
     <Link to={to} className="gh-logo" aria-label={`Gearhead ${tag} — home`}>
       <LogoMark />

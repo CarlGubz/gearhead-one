@@ -33,6 +33,8 @@ export function ThemeToggle() {
 }
 
 const NAV = [
+  { href: "/#suite", label: "Suite" },
+  { href: "/#suite", label: "Suite" },
   { href: "/#features", label: "Features" },
   { href: "/#workflow", label: "Workflow" },
   { to: "/pricing", label: "Pricing" },
@@ -127,11 +129,11 @@ export function SiteFooter() {
         </div>
         <TitleBlock
           items={[
-            { k: "Title", v: "Gearhead FEA — browser-based finite element analysis", wide: true },
+            { k: "Title", v: "Gearhead One — browser-based CAD, CFD and CAE", wide: true },
             { k: "Sheet", v: "1 of 1" },
             { k: "Scale", v: "1 : 1" },
             { k: "Rev", v: `${year}.${String(new Date().getMonth() + 1).padStart(2, "0")}` },
-            { k: "Solver", v: "Standalone FE · Tet/Hex" },
+            { k: "Solver", v: "CAD · CFD · FEA" },
             { k: "Currency", v: "PHP · GCash" },
             { k: "Status", v: "Released" },
             { k: "©", v: `${year} Gearhead` },
