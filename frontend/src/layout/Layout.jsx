@@ -34,7 +34,6 @@ export function ThemeToggle() {
 
 const NAV = [
   { href: "/#suite", label: "Suite" },
-  { href: "/#suite", label: "Suite" },
   { href: "/#features", label: "Features" },
   { href: "/#workflow", label: "Workflow" },
   { to: "/pricing", label: "Pricing" },
@@ -144,11 +143,32 @@ export function SiteFooter() {
   );
 }
 
+/** React Router doesn't scroll to #anchors on its own: do it after each navigation (and when arriving from another page). */
+function ScrollToHash() {
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (!hash) return undefined;
+    const id = decodeURIComponent(hash.slice(1));
+    // the target may mount a moment after the route changes, so retry briefly
+    let tries = 0;
+    let timer;
+    const go = () => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      else if (tries++ < 10) timer = setTimeout(go, 50);
+    };
+    go();
+    return () => clearTimeout(timer);
+  }, [pathname, hash]);
+  return null;
+}
+
 /** Header + page + footer for public and account pages. */
 export function SiteLayout() {
   return (
     <div className="gh-sheet">
       <a className="gh-skip" href="#main">Skip to content</a>
+      <ScrollToHash />
       <SiteHeader />
       <main id="main" className="gh-main">
         <Outlet />
