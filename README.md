@@ -579,3 +579,4 @@ external programs: **CalculiX**, **OpenFOAM**, **FEniCSx / DOLFINx**, **PyFR** (
 containers). The FEA AI assistant uses Google Gemini (or Anthropic / OpenRouter). Frontend: React, React Router, Vite,
 Three.js, `@react-three/fiber` / `drei`, Fontsource fonts. Gmsh's GPL does not extend to a web service, but shipping
 the app as a closed-source desktop installer would be distribution; check Gmsh's licensing first.
+ 
